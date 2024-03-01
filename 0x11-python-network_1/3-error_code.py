@@ -1,24 +1,18 @@
 #!/usr/bin/python3
 """
-POST request to the passed URL with the email as a parameter
+Sends a request to the URL and displays the body of the response
+(decoded in utf-8).
 """
-import urllib.request
-from sys import argv
 
 
-def main(argv):
-    """
-    Sends a POST request to the passed URL with the email as a parameter,
-    and displays the body of the response (decoded in utf-8)
-    """
-    values = {'email': argv[2]}
-    data = urllib.parse.urlencode(values)
-    data = data.encode('utf8')
+if __name__ == '__main__':
+    import sys
+    from urllib import request, error
+
+    argv = sys.argv
     url = argv[1]
-    req = urllib.request.Request(url, data)
-    with urllib.request.urlopen(req) as response:
-        result = response.read()
-        print(result.decode('utf8'))
-
-if __name__ == "__main__":
-    main(argv)
+    try:
+        with request.urlopen(url) as response:
+            print(response.read().decode('utf-8'))
+    except error.HTTPError as err:
+        print("Error code: {}".format(err.status))
